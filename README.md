@@ -1,93 +1,139 @@
 # QR Code Tracker App
 
-## What the App Does
-This app allows users (e.g., students) to scan QR codes and perform certain tasks. Each student has a unique QR code that identifies them. They can borrow products by scanning the product's QR code. Once a product is borrowed, the student’s QR code information and the product’s QR code information are stored in a database. When the product is returned, the entry is removed from the database. Additionally, students can scan a product's QR code to find out where to return it.
+## Overview
+The QR Code Tracker App allows users (e.g., students) to scan QR codes to borrow and return items. The app uses React Native with Expo for the frontend and 
+Supabase for the backend.
 
-### Platform
-- **Frontend:** React Native with Expo
-- **Backend:** Google Firebase for real-time database access
-- **Initial Target:** Android app
-- **Final Goal:** Publish on Android and Apple app stores for public download
+## Features
+- **Borrow Item:** Scan student and product QR codes to borrow items.
+- **Return Item:** Scan product QR code to return items.
+- **Where to Return:** Scan product QR code to find its return location.
+- **Error Handling:** Redirects to an error screen if scanning fails.
 
-## Home Screen
-The default page of the app contains the following components:
+## Project Structure
+```
+QRCode-tracker/
+├── assets/                 # Contains app icons and splash images
+├── screens/                # Contains all the screen components
+│   ├── BorrowScreen.js
+│   ├── ErrorScreen.js
+│   ├── HomeScreen.js
+│   ├── ReturnScreen.js
+│   └── WhereToReturnScreen.js
+├── App.js                  # Main app component with navigation setup
+├── app.json                # Expo configuration file
+├── index.js                # Entry point for the app
+├── package.json            # Project dependencies and scripts
+└── README.md               # Project documentation
+```
 
-- **Button 1:** "Borrow Item" with a relevant icon.
-  - **Action:** Launches the Borrow Item page.
-- **Button 2:** "Return Item" with a relevant icon.
-  - **Action:** Launches the Return Item page.
-- **Button 3:** "Where to Return" with a relevant icon.
-  - **Action:** Launches the Where to Return page.
+## Setup Instructions
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/abdullah-cts/QRCode-tracker.git
+   cd QRCode-tracker
+   ```
 
-### Page Style
-- All buttons are centered both vertically and horizontally.
-- Buttons span 80% of the viewport width.
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
 
-## Borrow Item Page
-When a user clicks "Borrow Item" on the Home Screen, this page launches. The following components are included:
+3. **Run the app:**
+   ```sh
+   npm start
+   ```
 
-- **Camera:** An invisible component to access the back camera.
-- **Button 1:** "Scan Student QR Code"
-  - **Action:** Triggers the camera to scan the QR code.
-  - If scanning fails, redirect to the Failure Page.
-  - If successful, disable itself and enable Button 2.
-- **Button 2:** "Scan Product QR Code"
-  - **Action:** Triggers the camera to scan the QR code.
-  - If scanning fails, redirect to the Failure Page.
-  - If successful, disable itself and enable Button 3.
-- **Button 3:** "Borrow"
-  - **Action:** Creates a database entry in Firebase with the scanned QR code data.
-  - If successful, show confetti animation and return to Home Screen after a few seconds.
+4. **Run on Android:**
+   ```sh
+   npm run android
+   ```
 
-### Page Style
-- Top 50% of the viewport is reserved for the camera.
-- The lower 50% is evenly divided between three buttons, each spanning 80% of the viewport width.
+5. **Run on iOS:**
+   ```sh
+   npm run ios
+   ```
 
-## Return Item Page
-This page allows students to return a borrowed product.
+6. **Run on Web:**
+   ```sh
+   npm run web
+   ```
 
-- **Camera:** An invisible component to access the back camera.
-- **Button 1:** "Scan Product QR Code"
-  - **Action:** Triggers the camera to scan the QR code.
-  - If scanning fails, redirect to the Failure Page.
-  - If successful, delete the entry from Firebase, show confetti, and return to Home Screen after a few seconds.
+## Screens
+### Home Screen
+- **Components:**
+  - `Borrow Item` button
+  - `Return Item` button
+  - `Where to Return` button
+- **Navigation:**
+  - Navigates to BorrowScreen, ReturnScreen, or WhereToReturnScreen
 
-### Page Style
-- Top 50% of the viewport is reserved for the camera.
-- The lower 50% is reserved for a single button, spanning 80% of the viewport width.
+### Borrow Screen
+- **Components:**
+  - Camera for scanning QR codes
+  - `Scan Student QR Code` button
+  - `Scan Product QR Code` button
+  - `Borrow` button
+- **Functionality:**
+  - Scans student and product QR codes
+  - Stores data in Firebase
+  - Shows confetti animation on successful borrow
 
-## Where to Return Page
-This page allows users to scan a product’s QR code to find its return location.
+### Return Screen
+- **Components:**
+  - Camera for scanning QR codes
+  - `Scan Product QR Code` button
+  - `Return Product` button
+- **Functionality:**
+  - Scans product QR code
+  - Deletes entry from Firebase
+  - Shows confetti animation on successful return
 
-- **Camera:** An invisible component to access the back camera.
-- **Button 1:** "Where to Return"
-  - **Action:** Triggers the camera to scan the product QR code.
-  - If scanning fails, redirect to the Failure Page.
-  - If successful, store the product’s location in a variable.
-- **Text Area:** Displays the stored location in read-only format.
+### Where to Return Screen
+- **Components:**
+  - Camera for scanning QR codes
+  - `Where to Return` button
+  - Displays location of the product
+- **Functionality:**
+  - Scans product QR code
+  - Displays return location
 
-### Page Style
-- Top 50% of the viewport is reserved for the camera.
-- The lower 50% is evenly divided between the button and text area, each spanning 80% of the viewport width.
+### Error Screen
+- **Components:**
+  - Error message
+  - `Return Home` button
+- **Functionality:**
+  - Redirects to HomeScreen on error
 
 ## Technical Details
-### Product QR Code Data
-- `device_id` (UUID4 unique identifier)
-- `name`
-- `device_type`
-- `device_sub_type`
-- `isFaulty`
-- `location`
-- `purpose`
+### QR Code Data
+- **Product QR Code:**
+  - `device_id` (UUID4)
+  - `name`
+  - `device_type`
+  - `device_sub_type`
+  - `isFaulty`
+  - `location`
+  - `purpose`
+- **Student QR Code:**
+  - `id` (UUID4)
+  - `role`
+  - `magic`
 
-### Student QR Code Data
-- `id` (UUID4 unique identifier)
-- `role`
-- `magic`
+### Supabase Structure
+- **Borrower List:**
+  - `device_id` (key)
+  - `student_id`
+  - `role`
+  - `magic`
 
-### Borrower List (Firebase Realtime Database)
-Each borrowed device entry contains:
-- `device_id` (key)
-- `student_id`
-- `role`
-- `magic`
+## Dependencies
+- React Native
+- Expo
+- React Navigation
+- Expo Camera
+- React Native Confetti Cannon
+- Firebase
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
